@@ -1,32 +1,17 @@
-import axios from "axios";
+console.log("START");
 
-const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
-const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
-const TO_PHONE = process.env.TO_PHONE;
-
-async function run() {
+(async () => {
   try {
-    const response = await axios.post(
-      `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`,
-      {
-        messaging_product: "whatsapp",
-        to: TO_PHONE,
-        type: "text",
-        text: { body: "Monitor test message" }
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${WHATSAPP_TOKEN}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
+    console.log("ENV CHECK", {
+      WHATSAPP_TOKEN: !!process.env.WHATSAPP_TOKEN,
+      PHONE_NUMBER_ID: process.env.PHONE_NUMBER_ID,
+      TO_PHONE: process.env.TO_PHONE
+    });
 
-    console.log("Success:", response.data);
-  } catch (error) {
-    console.error("Error:", error.response?.data || error.message);
+    console.log("DONE");
+    process.exit(0);
+  } catch (e) {
+    console.error("CRASH", e);
     process.exit(1);
   }
-}
-
-run();
+})();
