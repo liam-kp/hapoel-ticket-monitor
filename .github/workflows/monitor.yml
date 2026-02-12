@@ -1,0 +1,30 @@
+name: Hapoel Ticket Monitor
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run-monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: |
+          npm install axios cheerio
+
+      - name: Run monitor
+        run: node index.js
+        env:
+          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_TOKEN }}
+          PHONE_NUMBER_ID: ${{ secrets.PHONE_NUMBER_ID }}
+          TO_PHONE: ${{ secrets.TO_PHONE }}
